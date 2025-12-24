@@ -2,24 +2,15 @@ project:
   type: book
 
 book:
-  title: "Book_Entry"
-  author: "Norah Jones"
-  date: "12/24/2025"
+  title: "計量経済学"
+  author: "川田恵介"
+  date: now
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
-    - references.qmd
-
 bibliography: references.bib
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
-  pdf:
-    documentclass: scrreprt
-
-
+    toc: true
+    number-sections: true
 
