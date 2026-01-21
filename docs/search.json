@@ -4,17 +4,7 @@
     "href": "index.html",
     "title": "データ分析: 入門",
     "section": "",
-    "text": "1 はじめに\n本ページでは、データ分析の基本的な手法である「母平均やPopulation OLSの推定方法」をその基本概念とともに紹介します。 特に、「推定対象を定義する母集団上での計算と同じ計算をデータ上で行う」というシンプルな推定方法、優れた方法であることを強調します1。",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>はじめに</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#footnotes",
-    "href": "index.html#footnotes",
-    "title": "データ分析: 入門",
-    "section": "",
-    "text": "この方法は、プラグイン原理やアナログ原理と呼ばる、より一般的な推定方法のアイディアの一例です。↩︎",
+    "text": "1 はじめに\n本ページでは、データ分析における基本的な手法の一つである「母平均」および「Population OLS」の推定方法について、その基本概念とともに紹介します。\n特に、「推定対象として定義された母集団上での計算と同じ操作を、実際のデータ上で行う」というシンプルかつ応用の範囲が広い推定の考え方に注目します。 このアプローチは、プラグイン原理（plug-in principle） や アナログ原理（analogy principle） として知られており、より一般的な推定方法の一例としても位置づけられます。\nまた、OLS推定においては、モデルの定式化が結果の解釈や推定精度に大きく影響することにも注意が必要です。 現代の実証研究では、研究目標に応じて適切なモデルを構築することが極めて重要であり、本ページではその点についても強調していきます。",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>はじめに</span>"
     ]
@@ -64,7 +54,17 @@
     "href": "data.html#線型モデルへの要約",
     "title": "2  データの要約",
     "section": "2.4 線型モデルへの要約",
-    "text": "2.4 線型モデルへの要約\n大量の変数間の関係性を要約するために、線形モデルを適用する方法が広く用いられます。 例えば、賃金と年齢・学位・性別の関係を次のモデルで表すことを目指します。 \\[\n\\beta_0 + \\beta_1\\times age + \\beta_2\\times degree + \\beta_3\\times gender\n\\tag{2.2}\\]\nただしdegreeとgenderの値は、数字ではなく、文字です。 線型モデルに導入する際には、何らかの数字に変換する必要があります。\nここではbachelorとgenderをダミー変数、degreebachelorとgenderfemale、に変換します。 ダミー変数は、以下のように定義されます。\n\ndegreebachelor: degreeがbachelorだった場合は1、その他の場合は0\ngenderfemale: genderがfemaleだった場合は1、その他の場合は0\n\n\\(\\beta_0,\\beta_1,\\beta_2,\\beta_3\\) はパラメタと呼ばれ、モデルがデータに極力一致するように選ばれます。 このようにデータに合うように設定したモデルの特徴を調べることで、データの特徴を大雑把に理解することができます。\n\n2.4.1 OLS\nモデルをデータに適合される典型的な方法はOLS (最小二乗法) です。 具体的な計算方法を紹介する前に、Rでの実行方法から紹介します。 Rでは、lm関数を用いることで、OLSを容易に実行できます。 例えば、以下のコードで、Equation 2.2 を CPSSW04に適合させることができます。\n\n\n\nTable 2.3\n\n\nlm(earnings ~ age + degree + gender, CPSSW04)\n\n\nCall:\nlm(formula = earnings ~ age + degree + gender, data = CPSSW04)\n\nCoefficients:\n   (Intercept)             age  degreebachelor    genderfemale  \n        1.8838          0.4392          6.8651         -3.1579  \n\n\n\n\n各説明変数名の下の数値が、パラメタの計算結果です。 Equation 2.2 のようなシンプルな線型モデルにおいて、パラメタは各説明変数と結果変数であるearningsの「モデル上での関係性」を表します。 推定結果から、年齢や大学卒は賃金と正の関係があり、男性に比べて女性の賃金が低い傾向にあることがわかります。\n\n\n2.4.2 モデルの定式化\n線型モデルに要約することで、変数間の関係性を「ざっくり」把握することができます。 注意が必要なのは、以上の方法では、どのようなモデルをデータに適合させるのかは、分析者が決定する必要がある点です。\nどのようなモデルが適しているのかは、研究目標により異なります。 「人間がデータの大雑把な特徴を理解する」ことを目標にするのであれば、Equation 2.2 のような、シンプルなモデルが有力です。 このような大雑把な理解を目標に設定されたモデルは、記述モデルと呼ばれます1。\n\n\n2.4.3 OLSの計算方法\nOLSの具体的な計算方法を紹介します。 基本的なアイディアは、データとモデルの乖離度合いを測定する指標である、平均二乗誤差を極力小さくするようにパラメタを算出するというものです。\n例えば、ageのみを説明変数として、earningsについて、以下の線形モデルを設定します。 \\[\n\\beta_0 + \\beta_1\\times age\n\\] ある事例 \\(i\\) についての二乗誤差は以下のように定義されます。 \\[\n事例iの二乗誤差=(事例 i の所得 - \\underbrace{(\\beta_0+\\beta_1\\times 事例iのage)}_{モデルが算出する賃金})^2\n\\]\nOLSは全ての事例について、二乗誤差の平均値 (平均二乗誤差)を最小にするようにパラメタを算出します。\n平均値と同様に、OLSも別の計算方法があります。 この方法は、分布と条件付き平均値のみを用いて計算できます。 以下の条件付き平均値についての二乗誤差を最小化するようにパラメタの値を算出します。\n\\[\n(25才の平均所得 - (\\beta_0+\\beta_1\\times 25))^2\\times 25才の割合\n\\] \\[\n+ (26才の平均所得 - (\\beta_0+\\beta_1\\times 26))^2\\times 26才の割合\n\\] \\[\n+...\n\\]\nこちらの計算方法では、パラメタを「モデルが条件付き平均値に極力適合するように決定」するので、算出されたモデルは条件付き母平均のモデルであると解釈できます。 この解釈は、社会データについてのデータ分析において現実的であり、多くの教科書で採用されています (Angrist and Pischke 2009; Aronow and Miller 2019; Chernozhukov et al. 2024)。\n\n\n2.4.4 線型モデルの限界\n線型モデルは、あくまで関係性を単純化するため、実際の条件付き平均値を完全には反映しません。\n例えばearningsについて、\\(\\beta_0 + \\beta_1\\times age\\) をOLSで当てはめてみます。 実際の条件付き平均値とモデルの関係性は、以下でした。\n\n\n\n\n\n\n\n\n\n各点は年齢ごとの条件付き平均値、直線がOLSで推定された線型モデルとなります。\n線形モデルは、平均賃金と年齢が概ね右上がりの関係 (高年齢は賃金が高い)を捉えることができています。 ただし実際の平均賃金と年齢の関係性は、モデルのように”一直線”ではありません。 線形モデルは、この特徴を捉えることには失敗しています。\n\n\n\n\nAngrist, Joshua D, and Jörn-Steffen Pischke. 2009. Mostly Harmless Econometrics: An Empiricist’s Companion. Princeton university press.\n\n\nAronow, Peter M, and Benjamin T Miller. 2019. Foundations of Agnostic Statistics. Cambridge University Press.\n\n\nChernozhukov, Victor, Christian Hansen, Nathan Kallus, Martin Spindler, and Vasilis Syrgkanis. 2024. “Applied Causal Inference Powered by ML and AI.” arXiv Preprint arXiv:2403.02467.",
+    "text": "2.4 線型モデルへの要約\n大量の変数間の関係性を要約するために、線形モデルを適用する方法が広く用いられます。 例えば、賃金と年齢・学位・性別の関係を次のモデルで表すことを目指します。 \\[\n\\beta_0 + \\beta_1\\times age + \\beta_2\\times degree + \\beta_3\\times gender\n\\tag{2.2}\\]\nただしdegreeとgenderの値は、数字ではなく、文字です。 線型モデルに導入する際には、何らかの数字に変換する必要があります。\nここではbachelorとgenderをダミー変数、degreebachelorとgenderfemale、に変換します。 ダミー変数は、以下のように定義されます。\n\ndegreebachelor: degreeがbachelorだった場合は1、その他の場合は0\ngenderfemale: genderがfemaleだった場合は1、その他の場合は0\n\n\\(\\beta_0,\\beta_1,\\beta_2,\\beta_3\\) はパラメタと呼ばれ、モデルがデータに極力一致するように選ばれます。 このようにデータに合うように設定したモデルの特徴を調べることで、データの特徴を大雑把に理解することができます。\n\n2.4.1 OLS\nモデルをデータに適合される典型的な方法はOLS (最小二乗法) です。 具体的な計算方法を紹介する前に、Rでの実行方法から紹介します。 Rでは、lm関数を用いることで、OLSを容易に実行できます。 例えば、以下のコードで、Equation 2.2 を CPSSW04に適合させることができます。\n\n\n\nTable 2.3\n\n\nlm(earnings ~ age + degree + gender, CPSSW04)\n\n\nCall:\nlm(formula = earnings ~ age + degree + gender, data = CPSSW04)\n\nCoefficients:\n   (Intercept)             age  degreebachelor    genderfemale  \n        1.8838          0.4392          6.8651         -3.1579  \n\n\n\n\n各説明変数名の下の数値が、パラメタの計算結果です。 Equation 2.2 のようなシンプルな線型モデルにおいて、パラメタは各説明変数と結果変数であるearningsの「モデル上での関係性」を表します。 推定結果から、年齢や大学卒は賃金と正の関係があり、男性に比べて女性の賃金が低い傾向にあることがわかります。\n\n\n2.4.2 モデルの定式化\n線型モデルに要約することで、変数間の関係性を「ざっくり」把握することができます。 注意が必要なのは、以上の方法では、どのようなモデルをデータに適合させるのかは、分析者が決定する必要がある点です。\nどのようなモデルが適しているのかは、研究目標により異なります。 「人間がデータの大雑把な特徴を理解する」ことを目標にするのであれば、Equation 2.2 のような、シンプルなモデルが有力です。 このような大雑把な理解を目標に設定されたモデルは、記述モデルと呼ばれます1。\n\n\n2.4.3 OLSの計算方法\nOLSの具体的な計算方法を紹介します。 基本的なアイディアは、データとモデルの乖離度合いを測定する指標である、平均二乗誤差を極力小さくするようにパラメタを算出するというものです。\n例えば、ageのみを説明変数として、earningsについて、以下の線形モデルを設定します。 \\[\n\\beta_0 + \\beta_1\\times age\n\\] ある事例 \\(i\\) についての二乗誤差は以下のように定義されます。 \\[\n事例iの二乗誤差=(事例 i の所得 - \\underbrace{(\\beta_0+\\beta_1\\times 事例iのage)}_{モデルが算出する賃金})^2\n\\]\nOLSは全ての事例について、二乗誤差の平均値 (平均二乗誤差)を最小にするようにパラメタを算出します。\n平均値と同様に、OLSも別の計算方法があります。 この方法は、分布と条件付き平均値のみを用いて計算できます。 以下の条件付き平均値についての二乗誤差を最小化するようにパラメタの値を算出します。\n\\[\n(25才の平均所得 - (\\beta_0+\\beta_1\\times 25))^2\\times 25才の割合\n\\] \\[\n+ (26才の平均所得 - (\\beta_0+\\beta_1\\times 26))^2\\times 26才の割合\n\\] \\[\n+...\n\\]\nこちらの計算方法では、パラメタを「モデルが条件付き平均値に極力適合するように決定」するので、算出されたモデルは条件付き母平均のモデルであると解釈できます。 この解釈は、社会データの分析において現実的であり、多くの教科書で採用されています (Angrist and Pischke 2009; Aronow and Miller 2019; Chernozhukov et al. 2025)。\n\n\n2.4.4 線型モデルの限界\n線型モデルは、あくまで関係性を単純化するため、実際の条件付き平均値を完全には反映しません。\n例えばearningsについて、 \\[\n\\beta_0 + \\beta_1\\times age\n\\] をOLSで当てはめてみます。 実際の条件付き平均値とモデルの関係性は、以下でした。\n\nCPSSW04 |&gt; \n  ggplot(\n    aes(\n      x = age,\n      y = earnings\n    )\n  ) +\n  stat_summary(\n    aes(\n      color = \"条件付き平均値\"\n    ),\n    geom = \"point\"\n  ) +\n  geom_smooth(\n    aes(\n      color = \"モデル\"\n    ),\n    method = \"lm\",\n    se = FALSE\n  ) \n\n\n\n\n\n\n\nFigure 2.1\n\n\n\n\n\n各点は年齢ごとの条件付き平均値、直線がOLSで推定された線型モデルとなります。\n線形モデルは、平均賃金と年齢が概ね右上がりの関係 (高年齢は賃金が高い)を捉えることができています。 ただし実際の平均賃金と年齢の関係性は、モデルのように”一直線”ではありません。 線形モデルは、この特徴を捉えることには失敗しています。",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>データの要約</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#モデルの複雑化",
+    "href": "data.html#モデルの複雑化",
+    "title": "2  データの要約",
+    "section": "2.5 モデルの複雑化",
+    "text": "2.5 モデルの複雑化\nデータ上の平均値とモデルの乖離は、推定するモデルを複雑化することで、簡単に削減できます。 例えば以下のモデルを、OLSでデータに当てはめてみます。 \\[\n\\beta_0 + \\beta_1\\times age + \\beta_2\\times age^2\n\\]\n\\(\\beta_2\\times age^2\\) は高次項と呼ばれます。 このような項を加えても、OLSを用いればパラメータの推定は可能です。\n下図は、この2次モデルをデータに当てはめた結果を示しています。 直線ではなく、年齢に対して曲線的な関係が推定されており、データ上の条件付き平均値により近づいていることがわかります。\n\nCPSSW04 |&gt; \n  ggplot(\n    aes(\n      x = age,\n      y = earnings\n    )\n  ) +\n  stat_summary(\n    aes(\n      color = \"条件付き平均値\"\n    ),\n    geom = \"point\"\n  ) +\n  geom_smooth(\n    aes(\n      color = \"モデル\"\n    ),\n    method = \"lm\",\n    se = FALSE,\n    formula = y ~ poly(x,2)\n  )\n\n\n\n\n\n\n\n\nでは、さらにモデルを複雑にするとどうなるでしょうか？ 次に、9次までの高次項を含む以下のモデルを考えてみます。\n\\[\n\\beta_0 + \\beta_1\\times age+.. + \\beta_9\\times age^9\n\\]\nこのような高次の多項式モデルを用いると、モデルの予測値はデータ上の平均値とほぼ完全に一致するようになります。\n\nCPSSW04 |&gt; \n  ggplot(\n    aes(\n      x = age,\n      y = earnings\n    )\n  ) +\n  stat_summary(\n    aes(\n      color = \"条件付き平均値\"\n    ),\n    geom = \"point\"\n  ) +\n  geom_smooth(\n    aes(\n      color = \"モデル\"\n    ),\n    method = \"lm\",\n    se = FALSE,\n    formula = y ~ poly(x,9)\n  ) \n\n\n\n\n\n\n\n\nこのように、線形回帰モデルは非常に柔軟な枠組みであり、どれほど複雑な形であっても、モデルが”\\(\\beta\\) の足し算”である限り、データに当てはめること自体は可能です。\n複雑なモデルには、以下のような魅力があります。\n\nデータとの適合度が非常に高い\n現実の社会や市場は複雑であるため、モデルも複雑な方が良いと感じられる\n\nしかしながら、複雑すぎるモデルにはいくつかの問題点があります。\n\n過学習（オーバーフィッティング）により、モデルの推定精度が悪化する（詳しくは Section 3.5 を参照）\nモデルの構造が複雑すぎると、人間がその意味を理解しにくくなる（詳しくは Chapter 4 を参照）\n\nそのため、モデルの複雑さは、データの量や研究目標に応じて慎重に調整する必要があります。 具体的な研究目標とそれに応じたOLSの活用方法は、Chapter 4 で紹介します。\n\n\n\n\nAngrist, Joshua D, and Jörn-Steffen Pischke. 2009. Mostly Harmless Econometrics: An Empiricist’s Companion. Princeton university press.\n\n\nAronow, Peter M, and Benjamin T Miller. 2019. Foundations of Agnostic Statistics. Cambridge University Press.\n\n\nChernozhukov, Victor, Christian Hansen, Nathan Kallus, Martin Spindler, and Vasilis Syrgkanis. 2025. Applied Causal Inference Powered by ML and AI. https://causalml-book.org/.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>データの要約</span>"
     ]
@@ -130,13 +130,83 @@
     ]
   },
   {
+    "objectID": "population.html#sec-population_overfit",
+    "href": "population.html#sec-population_overfit",
+    "title": "3  母集団の要約と推定",
+    "section": "3.5 複雑すぎるモデルの問題点",
+    "text": "3.5 複雑すぎるモデルの問題点\nモデルが複雑すぎると、推定において深刻な問題が生じることがあります。 複雑なモデルのパラメータを高い精度で推定するためには、十分な数の観測事例が必要になるためです。 このためデータ数が限られている場合、複雑なモデルを推定すると、推定精度が大幅に低下し、ミスリードな推定結果を導くおそれがあります。\nここでは、単純な数値例を用いてこの問題を確認してみます。\n\n\n\n\n\n\nImportant数値例\n\n\n\n以下のような複雑な条件付き母平均を想定します4。\n\\[\nE[Y\\mid X] = X + 0.1\\times X^2 + 2\\times X^3 + 0.01\\times X^4 + 5 \\times x^5\n\\] \\[\n0.1 \\times x^6 + 3 \\times x^7 + 0.1 \\times x^8 + 0.1 \\times x^9 + 0.1 \\times x^{10}\n\\tag{3.1}\\]\n\n\n条件付き母平均とこの想定に基づいてランダム・サンプルングされた50事例のデータを図示すると、以下のようになります。\n\n\n\n\n\n\n\n\n\n赤線が条件付き母平均、黒点がデータを表します。\nまずは、単純な線型モデル \\((\\beta_0 + \\beta_1\\times X)\\) を推定してみます。\n\nfixest::feols(\n  Y ~ X,\n  data\n)\n\nこの推定結果と条件付き母平均を比較すると、以下のようになります。\n\n\n\n\n\n\n\n\n\nこの図からわかるように、単純なモデルでは複雑な母平均を捉えることができず、推定結果と母平均に乖離が生じています。\n次に、Equation 3.1 のような複雑な条件付き母平均を想定し、以下のような複雑なモデルを推定してみます。\n\nfixest::feols(\n  Y ~ poly(X,10), # Xの10乗までがモデルに導入されます。\n  data\n)\n\nこの推定結果と条件付き母平均を比較すると、以下のようになります。\n\n\n\n\n\n\n\n\n\n複雑なモデルの方が、条件付き母平均に近づくように思えるかもしれませんが、実際には母平均との乖離がむしろ拡大していることがわかります。 これは、少ないデータ（50事例）で複雑なモデルを推定したため、パラメータの推定精度が著しく低下したことを示しています。\nでは、同じ複雑なモデルを、十分なデータ（5万事例）で推定した場合はどうなるでしょうか。\n\n\n\n\n\n\n\n\n\nこの場合、推定結果は条件付き母平均とほぼ一致しており、十分なデータがあれば、複雑なモデルでもOLSによって高精度な推定が可能であることが確認できます。\nこの数値例からわかるように、複雑なモデルを用いる際には、十分なデータがあるかどうかを慎重に検討する必要があります。",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>母集団の要約と推定</span>"
+    ]
+  },
+  {
     "objectID": "population.html#footnotes",
     "href": "population.html#footnotes",
     "title": "3  母集団の要約と推定",
     "section": "",
-    "text": "アナログ原理やプラグイン原理として呼ばれています。↩︎\n母平均が計算できないケースとしては、母分布がコーシー分布である場合などが有名です。↩︎\nどのくらいあれば十分なのかは、難しい問題です。ただし多くの教科書では、200事例以上が基準とされています。↩︎",
+    "text": "アナログ原理やプラグイン原理として呼ばれています。↩︎\n母平均が計算できないケースとしては、母分布がコーシー分布である場合などが有名です。↩︎\nどのくらいあれば十分なのかは、難しい問題です。ただし多くの教科書では、200事例以上が基準とされています。↩︎\n個々の \\(Y\\) と \\(X\\) の値は、以下で決定されます: \\(X=\\) 0から1までの一様分布、 \\[\nY=E[Y\\mid X] + \\underbrace{u}_{平均0,分散1の正規分布}\n\\] ↩︎",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>母集団の要約と推定</span>"
+    ]
+  },
+  {
+    "objectID": "nextstep.html",
+    "href": "nextstep.html",
+    "title": "4  OLSの応用と課題",
+    "section": "",
+    "text": "4.1 ナイーブな見方: 完璧なモデルの推定\nここまで、あるモデルをどのように推定するかを紹介してきました。 しかし、どのようなモデルを推定すべきかは、研究の目的によって異なります。 本章では、望ましいモデルの定式化について、目的別に整理していきます。 またそれぞれの研究目的について、OLSを用いる際の注意点とOLS以外の手法も紹介します。\nデータ分析を学び始めたばかりの頃、「この手法を使えば社会の真理を明らかにできるのではないか」と期待してしまうことがあります。 言い換えれば、結果変数に対して「完璧でシンプルなモデル」を推定できると考えてしまうかもしれません。\nたとえば、以下のような回帰モデルを用いて、賃金を正確に予測できると期待することがあります。\nTable 4.1\n\n\ndata(\"CPSSW04\", package = \"AER\") # データの読み込み\n\nfixest::feols(earnings ~ degree + age + gender, CPSSW04)\n\nOLS estimation, Dep. Var.: earnings\nObservations: 7,986\nStandard-errors: IID \n                Estimate Std. Error   t value  Pr(&gt;|t|)    \n(Intercept)     1.883797   0.920292   2.04696  0.040695 *  \ndegreebachelor  6.865150   0.178369  38.48856 &lt; 2.2e-16 ***\nage             0.439204   0.030529  14.38664 &lt; 2.2e-16 ***\ngenderfemale   -3.157864   0.180365 -17.50821 &lt; 2.2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\nRMSE: 7.88234   Adj. R2: 0.189694\nしかしながら、このような期待は、少なくとも社会や市場のデータ分析においては、現実的ではありません。 以下の点に注意が必要です。\n以上の理由から、OLSによって「完璧でシンプルなモデル」を推定しようとする試みは、通常うまくいきません。 そのため、分析の目的に応じて、適切なモデルを構築することが現実的なアプローチとなります。",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>OLSの応用と課題</span>"
+    ]
+  },
+  {
+    "objectID": "nextstep.html#ナイーブな見方-完璧なモデルの推定",
+    "href": "nextstep.html#ナイーブな見方-完璧なモデルの推定",
+    "title": "4  OLSの応用と課題",
+    "section": "",
+    "text": "OLSによって推定されるのは、あくまで「条件付き母平均」のモデルです。つまり、特定の条件（たとえば学歴・性別・年齢）を満たす人々の平均的な賃金を推定しているにすぎません。現実の社会や市場では、同じ条件を持つ人々の間でも賃金には大きなばらつきがあります。たとえば、同じ学歴・性別・年齢であっても、職種や勤務地、経験年数などによって賃金は大きく異なるのが普通です。したがって、モデルが「真の賃金」を正確に予測することは不可能です。\n上記のような単純なモデルでは、現実の平均賃金の構造を十分に表現することはできません。現実の平均賃金と学歴、性別、年齢の関係性は、より複雑であると予想されます。",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>OLSの応用と課題</span>"
+    ]
+  },
+  {
+    "objectID": "nextstep.html#全体の記述",
+    "href": "nextstep.html#全体の記述",
+    "title": "4  OLSの応用と課題",
+    "section": "4.2 全体の記述",
+    "text": "4.2 全体の記述\n記述研究とは、データに含まれる情報をもとに、複数の変数の間にどのような関係が存在するのかを明らかにすることを目的とする研究です。\nこのような目的に対して、OLSは非常に有効な分析手法とされています。 OLSは、単純な線形モデルの推定を得意としています。 Table 4.1 のような単純な線形モデルは構造が単純であるため、ある程度データ分析に慣れていれば、どの変数がどのように影響しているのかを人間が理解しやすい形で示すことができます。 例えば、大学卒のパラメタは正なので、平均賃金が高い傾向、女性は平均賃金が低い傾向、年齢と平均賃金は正の関係性が読み取れます。\n\n4.2.1 OLSの注意点\nしかし、OLSを用いる際には注意すべき点もあります。 特に重要なのは、得られた関係性の要約が、どのようなモデルを推定したのか、すなわちモデルの定式化に大きく依存するという点です。 たとえば、どの変数を説明変数として選ぶか、自条項などを加えるかなどの選択によって、分析結果が大きく変わる可能性があります。 そのため、モデルを定式化する段階で、定式化が最終的な解釈や結論に強く影響を与えることを理解しておく必要があります。\n\n\n4.2.2 他の手法\n本ページでは、OLSは条件付き母平均の線型モデルを推定する手法として紹介しました。 言い換えると、条件付き母平均の記述の手法です。\n記述分析の目標は、条件付き母平均のみではありません。 たとえば、母分布そのものの記述を目指す場合には、クラスタリングモデル1などが有効です。 このような分布のモデルを推定する手法としては、最尤推定やベイズ推定法が活用されます。",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>OLSの応用と課題</span>"
+    ]
+  },
+  {
+    "objectID": "nextstep.html#予測",
+    "href": "nextstep.html#予測",
+    "title": "4  OLSの応用と課題",
+    "section": "4.3 予測",
+    "text": "4.3 予測\n予測研究とは、推定されたモデルを用いて、目的変数 \\(Y\\) の値や未知を予測することを主な目的とする研究です。 たとえば、Table 4.1 で推定されたモデルを用いて、ある個人の属性情報（年齢、学歴）をもとに、その人の賃金を予測する場合などが該当します。\n予測研究と比較研究との大きな違いは、モデルの中身、すなわち各パラメータの意味や解釈が重視されない点にあります。 比較研究では、変数間の関係性を人間が把握することが目的となるため、モデルの理解やパラメータの解釈が重要です。 一方、予測研究では、最終的な予測の精度こそが最も重要な評価基準となります。\nこのため、予測研究では、人間が予測モデルの構造を完全に理解できなくても、大きな問題とはされません。 むしろ、より高い予測精度を実現するために、複雑なモデルが積極的に用いられる傾向があります。 たとえば、以下のような二乗項と交差項 (変数同士の掛け算)を含むモデルが考えられます。\n\\[\nearningsの予測モデル = \\beta_0\n\\] \\[\n+\\beta_1\\times degreebachelor + \\beta_2\\times age + \\beta_3\\times genderfemale\n\\]\n\\[\n+\\beta_5\\times age^2\n\\]\n\\[\n+\\beta_6\\times degreebachelor\\times age + \\beta_7\\times degreebachelor\\times genderfemale\n\\]\n\\[\n+\\beta_7\\times age\\times genderfemale\n\\]\nこのような複雑なモデルであっても、OLSによって推定することが可能です。\n\nmodel &lt;- fixest::feols(\n  earnings ~ degree + age + gender +\n    age^2 + \n    degree:age + degree:gender + age:gender, \n  CPSSW04)\n\ncoef(model)\n\n                (Intercept)              degreebachelor \n               -21.60207344                 -5.33505137 \n                        age                genderfemale \n                 2.11156693                  5.10734867 \n                   I(age^2)          degreebachelor:age \n                -0.02946533                  0.41195443 \ndegreebachelor:genderfemale            age:genderfemale \n                -0.24754070                 -0.27156417 \n\n\n\n4.3.1 OLSの注意点\n予測分析においても、モデルを複雑化することの弊害は存在します。 それは、パラメタの推定精度の悪化に伴う、予測精度の低下です。 予測性能を確保するためには、モデルを複雑にしすぎないことが必要です。\nただし、特に説明変数が多い場合、研究者がモデルの複雑性を適切にコントロールすることは、事実上不可能です。\n\n\n4.3.2 他の手法\n近年では、より柔軟にデータを活用する手法が注目されています。 代表的なものとして、機械学習分野における教師付き学習2があり、経済学の分野でもその応用が急速に進んでいます。 これらの手法は、複雑なモデルであっても予測精度を確保するためのさまざまな工夫が導入されている点が特徴です。",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>OLSの応用と課題</span>"
+    ]
+  },
+  {
+    "objectID": "nextstep.html#特定の特徴の記述",
+    "href": "nextstep.html#特定の特徴の記述",
+    "title": "4  OLSの応用と課題",
+    "section": "4.4 特定の特徴の記述",
+    "text": "4.4 特定の特徴の記述\nOLSがよく応用されてきた研究課題の一つに、特定の変数間の関係性を明らかにする分析があります。 たとえば、賃金（earnings）と学歴（degree）の関係を調べる研究がその例です。\nこのような課題に対しては、以下のようなシンプルな線形モデルを推定することで、基本的な関係性を把握することができます。\n\nmodel &lt;- fixest::feols(earnings ~ degree, CPSSW04)\n\nconfint(model)[2,] # degreebachelorについての信頼区間を抽出 \n\n                  2.5 %   97.5 %\ndegreebachelor 6.138989 6.855967\n\n\nこの推定結果から、大学卒の方が、概ね 6.14 \\(\\sim\\) 6.86ほど平均賃金が高いと考えられます。\nさらに、OLSを用いることで、賃金と学歴の関係について、より詳細な特徴を捉えることも可能です。 たとえば、「もし大学卒と非大学卒の間で、性別や年齢の分布に違いがなかったとしたら、賃金格差はどうなるか？」という問いに答えることができます。\n実際のデータでは、大学卒と非大学卒の間で性別や年齢の分布に差があります。 こうした差を統計的に調整したうえで賃金を比較するには、直接の関心ではない説明変数（この場合は age や gender）について、より柔軟に定式化したモデルを用いることが有効です。\n以下は、その一例です。\n\n\n\nTable 4.2\n\n\nmodel &lt;- fixest::feols(\n  earnings ~ degree +\n    age + gender +\n    age^2 + age:gender, # genderとageについて交差項と二乗項を導入\n  CPSSW04)\n\nconfint(model)[2,] # degreebachelorについての信頼区間\n\n                2.5 %   97.5 %\ndegreebachelor 6.4815 7.180926\n\n\n\n\nこの推定結果から、大学卒の人の平均賃金は、概ね 6.49 \\(\\sim\\) 7.18ほど高いという結果が得られ、単純なモデルよりも格差がやや広がっていることがわかります。\n\n4.4.1 OLSの注意点\n\n結果の解釈\nこのように推定された差が、社会のどのような特徴を捉えているのかは、以前として不明確です。 例えば、degreebachelorの信頼区間は 6.49 \\(\\sim\\) 7.18であったとしても、「大学進学が賃金を平均的に増加させる因果的効果を持つ」と結論づけることはできません。\nその理由は、degree 間の賃金格差が、age や gender 以外の要因によって生じている可能性があるからです。\nこのように、データから得られた推定結果をもとに因果効果をどのように推論するかという問題は、「統計的因果推論」と呼ばれる分野で活発に研究されています3。\n\n\n推定の信頼性\nTable 4.2 では、関心のある変数 degree と、その他の変数 age や gender の交差項は導入していません。このような場合、degreebachelor の推定結果の解釈が不明瞭になることがあります。\nそのため、degree と他の変数との交差項を導入し、それらの結果を「集計」するというアプローチが推奨されます4。 このような推定は、marginaleffects パッケージを用いることで簡単に実装できます5。\nたとえば、以下のように実行します。\n\nmodel &lt;- fixest::feols(\n  earnings ~ degree +\n    degree:(age + gender +\n              age^2 + age:gender) + # degreeとの交差項  \n    age + gender +\n    age^2 + age:gender, # genderとageについて交差項と二乗項を導入\n  CPSSW04)\n\nmarginaleffects::avg_slopes(\n  model,\n  variables = \"degree\"\n)\n\n\n Estimate Std. Error    z Pr(&gt;|z|)      S 2.5 % 97.5 %\n     6.82      0.178 38.3   &lt;0.001 1064.6  6.47   7.17\n\nTerm: degree\nType: response\nComparison: bachelor - highschool\n\n\nこの結果から、gender と age の分布の違いを統計的に解消した場合、大学卒の人の平均賃金は概ね 6.47 \\(\\sim\\) 7.17 高いと推定されました。\n\n\n\n4.4.2 他の手法\nOLSを用いた比較には、いくつかの問題点が指摘され、それを解消できる手法も開発されてます。 例えば、傾向スコアやエントロピーウェイトなどを活用する方法 (Hainmueller 2012) が有名です。\nさらに機械学習を活用した信頼性の改善方法も、近年確立されつつあります。 この方法は機械学習の持つ問題点 (信頼区間の計算が難しいなど) を補う仕組みを導入することで、モデルの定式化への推定結果の依存度を下げつつ、推定誤差を考慮した分析が可能になっています6。\n\n\n\n\nChattopadhyay, Ambarish, and José R Zubizarreta. 2023. “On the Implied Weights of Linear Regression for Causal Inference.” Biometrika 110 (3): 615–29.\n\n\nChernozhukov, Victor, Christian Hansen, Nathan Kallus, Martin Spindler, and Vasilis Syrgkanis. 2025. Applied Causal Inference Powered by ML and AI. https://causalml-book.org/.\n\n\nDing, Peng. 2023. “A First Course in Causal Inference.” https://arxiv.org/abs/2305.18793.\n\n\n———. 2024. A First Course in Causal Inference. Chapman; Hall/CRC.\n\n\nGormley, Isobel Claire, Thomas Brendan Murphy, and Adrian E Raftery. 2023. “Model-Based Clustering.” Annual Review of Statistics and Its Application 10 (1): 573–95.\n\n\nHainmueller, Jens. 2012. “Entropy Balancing for Causal Effects: A Multivariate Reweighting Method to Produce Balanced Samples in Observational Studies.” Political Analysis 20 (1): 25–46.\n\n\nJames, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2021. An Introduction to Statistical Learning: With Applications in r. 2nd ed. Springer Texts in Statistics. Springer. https://www.statlearning.com/.\n\n\nWager, Stefan. 2024. Causal Inference: A Statistical Learning Approach. Technical report, Stanford University. https://web.stanford.edu/~swager/causal_inf_book.pdf.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>OLSの応用と課題</span>"
+    ]
+  },
+  {
+    "objectID": "nextstep.html#footnotes",
+    "href": "nextstep.html#footnotes",
+    "title": "4  OLSの応用と課題",
+    "section": "",
+    "text": "Gormley, Murphy, and Raftery (2023)↩︎\nJames et al. (2021)↩︎\nChernozhukov et al. (2025), Wager (2024) , Ding (2024) (ドラフト版: Ding (2023))↩︎\nChattopadhyay and Zubizarreta (2023)↩︎\n詳細は、パッケージのホームページ (https://marginaleffects.com/) を参照ください。↩︎\nChernozhukov et al. (2025)↩︎",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>OLSの応用と課題</span>"
     ]
   }
 ]

@@ -212,6 +212,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">母集団の要約と推定</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nextstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">OLSの応用と課題</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -241,6 +247,7 @@ window.Quarto = {
   <li><a href="#olsの計算方法" id="toc-olsの計算方法" class="nav-link" data-scroll-target="#olsの計算方法"><span class="header-section-number">2.4.3</span> OLSの計算方法</a></li>
   <li><a href="#線型モデルの限界" id="toc-線型モデルの限界" class="nav-link" data-scroll-target="#線型モデルの限界"><span class="header-section-number">2.4.4</span> 線型モデルの限界</a></li>
   </ul></li>
+  <li><a href="#モデルの複雑化" id="toc-モデルの複雑化" class="nav-link" data-scroll-target="#モデルの複雑化"><span class="header-section-number">2.5</span> モデルの複雑化</a></li>
   </ul>
 </nav>
     </div>
@@ -484,13 +491,81 @@ Coefficients:
 \]</span> <span class="math display">\[
 +...
 \]</span></p>
-<p>こちらの計算方法では、パラメタを「モデルが条件付き平均値に極力適合するように決定」するので、算出されたモデルは条件付き母平均のモデルであると解釈できます。 この解釈は、社会データについてのデータ分析において現実的であり、多くの教科書で採用されています <span class="citation" data-cites="angrist2009mostly aronow2019foundations chernozhukov2024applied">(<a href="#ref-angrist2009mostly" role="doc-biblioref">Angrist and Pischke 2009</a>; <a href="#ref-aronow2019foundations" role="doc-biblioref">Aronow and Miller 2019</a>; <a href="#ref-chernozhukov2024applied" role="doc-biblioref">Chernozhukov et al. 2024</a>)</span>。</p>
+<p>こちらの計算方法では、パラメタを「モデルが条件付き平均値に極力適合するように決定」するので、算出されたモデルは条件付き母平均のモデルであると解釈できます。 この解釈は、社会データの分析において現実的であり、多くの教科書で採用されています <span class="citation" data-cites="angrist2009mostly aronow2019foundations chernozhukov2024applied">(<a href="#ref-angrist2009mostly" role="doc-biblioref">Angrist and Pischke 2009</a>; <a href="#ref-aronow2019foundations" role="doc-biblioref">Aronow and Miller 2019</a>; <a href="#ref-chernozhukov2024applied" role="doc-biblioref">Chernozhukov et al. 2025</a>)</span>。</p>
 </section>
 <section id="線型モデルの限界" class="level3" data-number="2.4.4">
 <h3 data-number="2.4.4" class="anchored" data-anchor-id="線型モデルの限界"><span class="header-section-number">2.4.4</span> 線型モデルの限界</h3>
 <p>線型モデルは、あくまで関係性を単純化するため、実際の条件付き平均値を完全には反映しません。</p>
-<p>例えばearningsについて、<span class="math inline">\(\beta_0 + \beta_1\times age\)</span> をOLSで当てはめてみます。 実際の条件付き平均値とモデルの関係性は、以下でした。</p>
+<p>例えばearningsについて、 <span class="math display">\[
+\beta_0 + \beta_1\times age
+\]</span> をOLSで当てはめてみます。 実際の条件付き平均値とモデルの関係性は、以下でした。</p>
 <div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>CPSSW04 <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> age,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> earnings</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">"条件付き平均値"</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"point"</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">"モデル"</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-data_linear" class="quarto-float quarto-figure quarto-figure-center anchored" width="672">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-data_linear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data_files/figure-html/fig-data_linear-1.png" id="fig-data_linear" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-data_linear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>各点は年齢ごとの条件付き平均値、直線がOLSで推定された線型モデルとなります。</p>
+<p>線形モデルは、平均賃金と年齢が概ね右上がりの関係 (高年齢は賃金が高い)を捉えることができています。 ただし実際の平均賃金と年齢の関係性は、モデルのように”一直線”ではありません。 線形モデルは、この特徴を捉えることには失敗しています。</p>
+</section>
+</section>
+<section id="モデルの複雑化" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="モデルの複雑化"><span class="header-section-number">2.5</span> モデルの複雑化</h2>
+<p>データ上の平均値とモデルの乖離は、推定するモデルを複雑化することで、簡単に削減できます。 例えば以下のモデルを、OLSでデータに当てはめてみます。 <span class="math display">\[
+\beta_0 + \beta_1\times age + \beta_2\times age^2
+\]</span></p>
+<p><span class="math inline">\(\beta_2\times age^2\)</span> は高次項と呼ばれます。 このような項を加えても、OLSを用いればパラメータの推定は可能です。</p>
+<p>下図は、この2次モデルをデータに当てはめた結果を示しています。 直線ではなく、年齢に対して曲線的な関係が推定されており、データ上の条件付き平均値により近づいていることがわかります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>CPSSW04 <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> age,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> earnings</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">"条件付き平均値"</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"point"</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">"モデル"</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> <span class="fu">poly</span>(x,<span class="dv">2</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -499,8 +574,53 @@ Coefficients:
 </div>
 </div>
 </div>
-<p>各点は年齢ごとの条件付き平均値、直線がOLSで推定された線型モデルとなります。</p>
-<p>線形モデルは、平均賃金と年齢が概ね右上がりの関係 (高年齢は賃金が高い)を捉えることができています。 ただし実際の平均賃金と年齢の関係性は、モデルのように”一直線”ではありません。 線形モデルは、この特徴を捉えることには失敗しています。</p>
+<p>では、さらにモデルを複雑にするとどうなるでしょうか？ 次に、9次までの高次項を含む以下のモデルを考えてみます。</p>
+<p><span class="math display">\[
+\beta_0 + \beta_1\times age+.. + \beta_9\times age^9
+\]</span></p>
+<p>このような高次の多項式モデルを用いると、モデルの予測値はデータ上の平均値とほぼ完全に一致するようになります。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>CPSSW04 <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> age,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> earnings</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">"条件付き平均値"</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"point"</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">"モデル"</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> y <span class="sc">~</span> <span class="fu">poly</span>(x,<span class="dv">9</span>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>このように、線形回帰モデルは非常に柔軟な枠組みであり、どれほど複雑な形であっても、モデルが”<span class="math inline">\(\beta\)</span> の足し算”である限り、データに当てはめること自体は可能です。</p>
+<p>複雑なモデルには、以下のような魅力があります。</p>
+<ul>
+<li><p>データとの適合度が非常に高い</p></li>
+<li><p>現実の社会や市場は複雑であるため、モデルも複雑な方が良いと感じられる</p></li>
+</ul>
+<p>しかしながら、複雑すぎるモデルにはいくつかの問題点があります。</p>
+<ul>
+<li><p>過学習（オーバーフィッティング）により、モデルの推定精度が悪化する（詳しくは <a href="population.html#sec-population_overfit" class="quarto-xref"><span>Section 3.5</span></a> を参照）</p></li>
+<li><p>モデルの構造が複雑すぎると、人間がその意味を理解しにくくなる（詳しくは <a href="nextstep.html" class="quarto-xref"><span>Chapter 4</span></a> を参照）</p></li>
+</ul>
+<p>そのため、モデルの複雑さは、データの量や研究目標に応じて慎重に調整する必要があります。 具体的な研究目標とそれに応じたOLSの活用方法は、<a href="nextstep.html" class="quarto-xref"><span>Chapter 4</span></a> で紹介します。</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
@@ -511,10 +631,9 @@ Angrist, Joshua D, and Jörn-Steffen Pischke. 2009. <em>Mostly Harmless Economet
 Aronow, Peter M, and Benjamin T Miller. 2019. <em>Foundations of Agnostic Statistics</em>. Cambridge University Press.
 </div>
 <div id="ref-chernozhukov2024applied" class="csl-entry" role="listitem">
-Chernozhukov, Victor, Christian Hansen, Nathan Kallus, Martin Spindler, and Vasilis Syrgkanis. 2024. <span>“Applied Causal Inference Powered by ML and AI.”</span> <em>arXiv Preprint arXiv:2403.02467</em>.
+Chernozhukov, Victor, Christian Hansen, Nathan Kallus, Martin Spindler, and Vasilis Syrgkanis. 2025. <em>Applied Causal Inference Powered by ML and AI</em>. <a href="https://causalml-book.org/">https://causalml-book.org/</a>.
 </div>
 </div>
-</section>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>

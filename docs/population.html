@@ -65,6 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./nextstep.html" rel="next">
 <link href="./data.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -191,6 +192,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">母集団の要約と推定</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nextstep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">OLSの応用と課題</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -223,6 +230,7 @@ window.Quarto = {
   <li><a href="#統計的推論" id="toc-統計的推論" class="nav-link" data-scroll-target="#統計的推論"><span class="header-section-number">3.4.1</span> 統計的推論</a></li>
   <li><a href="#信頼区間-1" id="toc-信頼区間-1" class="nav-link" data-scroll-target="#信頼区間-1"><span class="header-section-number">3.4.2</span> 信頼区間</a></li>
   </ul></li>
+  <li><a href="#sec-population_overfit" id="toc-sec-population_overfit" class="nav-link" data-scroll-target="#sec-population_overfit"><span class="header-section-number">3.5</span> 複雑すぎるモデルの問題点</a></li>
   </ul>
 </nav>
     </div>
@@ -596,9 +604,91 @@ age         7984</code></pre>
 </ul>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="sec-population_overfit" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="sec-population_overfit"><span class="header-section-number">3.5</span> 複雑すぎるモデルの問題点</h2>
+<p>モデルが複雑すぎると、推定において深刻な問題が生じることがあります。 複雑なモデルのパラメータを高い精度で推定するためには、十分な数の観測事例が必要になるためです。 このためデータ数が限られている場合、複雑なモデルを推定すると、推定精度が大幅に低下し、ミスリードな推定結果を導くおそれがあります。</p>
+<p>ここでは、単純な数値例を用いてこの問題を確認してみます。</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>数値例
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>以下のような複雑な条件付き母平均を想定します<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。</p>
+<p><span class="math display">\[
+E[Y\mid X] = X + 0.1\times X^2 + 2\times X^3 + 0.01\times X^4 + 5 \times x^5
+\]</span> <span id="eq-population_numeric_example"><span class="math display">\[
+0.1 \times x^6 + 3 \times x^7 + 0.1 \times x^8 + 0.1 \times x^9 + 0.1 \times x^{10}
+\tag{3.1}\]</span></span></p>
+</div>
+</div>
+<p>条件付き母平均とこの想定に基づいてランダム・サンプルングされた50事例のデータを図示すると、以下のようになります。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="population_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>赤線が条件付き母平均、黒点がデータを表します。</p>
+<p>まずは、単純な線型モデル <span class="math inline">\((\beta_0 + \beta_1\times X)\)</span> を推定してみます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fixest<span class="sc">::</span><span class="fu">feols</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  Y <span class="sc">~</span> X,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  data</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>この推定結果と条件付き母平均を比較すると、以下のようになります。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="population_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>この図からわかるように、単純なモデルでは複雑な母平均を捉えることができず、推定結果と母平均に乖離が生じています。</p>
+<p>次に、<a href="#eq-population_numeric_example" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> のような複雑な条件付き母平均を想定し、以下のような複雑なモデルを推定してみます。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fixest<span class="sc">::</span><span class="fu">feols</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  Y <span class="sc">~</span> <span class="fu">poly</span>(X,<span class="dv">10</span>), <span class="co"># Xの10乗までがモデルに導入されます。</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  data</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>この推定結果と条件付き母平均を比較すると、以下のようになります。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="population_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>複雑なモデルの方が、条件付き母平均に近づくように思えるかもしれませんが、実際には母平均との乖離がむしろ拡大していることがわかります。 これは、少ないデータ（50事例）で複雑なモデルを推定したため、パラメータの推定精度が著しく低下したことを示しています。</p>
+<p>では、同じ複雑なモデルを、十分なデータ（5万事例）で推定した場合はどうなるでしょうか。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="population_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>この場合、推定結果は条件付き母平均とほぼ一致しており、十分なデータがあれば、複雑なモデルでもOLSによって高精度な推定が可能であることが確認できます。</p>
+<p>この数値例からわかるように、複雑なモデルを用いる際には、十分なデータがあるかどうかを慎重に検討する必要があります。</p>
+
+
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
@@ -606,6 +696,9 @@ age         7984</code></pre>
 <li id="fn1"><p>アナログ原理やプラグイン原理として呼ばれています。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>母平均が計算できないケースとしては、母分布がコーシー分布である場合などが有名です。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>どのくらいあれば十分なのかは、難しい問題です。ただし多くの教科書では、200事例以上が基準とされています。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>個々の <span class="math inline">\(Y\)</span> と <span class="math inline">\(X\)</span> の値は、以下で決定されます: <span class="math inline">\(X=\)</span> 0から1までの一様分布、 <span class="math display">\[
+Y=E[Y\mid X] + \underbrace{u}_{平均0,分散1の正規分布}
+\]</span> <a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -1017,6 +1110,9 @@ age         7984</code></pre>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./nextstep.html" class="pagination-link" aria-label="OLSの応用と課題">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">OLSの応用と課題</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
