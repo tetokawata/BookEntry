@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; データの要約 – データ分析: 入門</title>
+<title>2&nbsp; データの要約 – データ分析: OLS入門</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -168,7 +168,7 @@ window.Quarto = {
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     </a>
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">データ分析: 入門</span>
+    <span class="navbar-title">データ分析: OLS入門</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -307,7 +307,7 @@ window.Quarto = {
 </div>
 <section id="分布による要約" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="分布による要約"><span class="header-section-number">2.1</span> 分布による要約</h2>
-<p>具体的例を示すために、まずAER packageからCPSSW04データを読み込み、一部の事例を表示します。</p>
+<p>具体的例を示すために、まず<code>AER</code> packageから<code>CPSSW04</code>データを読み込み、一部の事例を表示します。</p>
 <div id="tbl-gtsummary" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-pos="H">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-gtsummary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -331,9 +331,9 @@ Table&nbsp;2.1
 </div>
 </figure>
 </div>
-<p>CPSSW04はアメリカの労働者についての調査であり、四つの変数 (所得: earnings, 学位: degree, 性別: gender, 年齢: age) が観察できます。 また合計で 7986 事例が含まれています。</p>
+<p><code>CPSSW04</code>はアメリカの労働者についての調査であり、四つの変数 (所得: <code>earnings</code>, 学位: <code>degree</code>, 性別: <code>gender</code>, 年齢: <code>age</code>) が観察できます。 また合計で 7986 事例が含まれています。</p>
 <p>このような巨大なデータを直接理解できる人間は、おそらく存在しないでしょう。</p>
-<p>そこで、最も基本的な要約方法は分布表を作成してみます。 分布とは、変数の値が同一である事例数を示します。 例えば、count関数を用いると、学位と性別の分布は次のように計算できます。</p>
+<p>そこで、最も基本的な要約方法は分布表を作成してみます。 分布とは、変数の値が同一である事例数を示します。 例えば、<code>count</code>関数を用いると、学位と性別の分布は次のように計算できます。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  CPSSW04,</span>
@@ -358,18 +358,18 @@ Table&nbsp;2.1
 4   bachelor female 1739 0.2177561</code></pre>
 </div>
 </div>
-<p>CPSSW04において、全体の1/3程度が高校卒の男性であることなどがわかります。</p>
+<p><code>CPSSW04</code>において、全体の1/3程度が高校卒の男性であることなどがわかります。</p>
 <section id="分布の限界" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="分布の限界"><span class="header-section-number">2.1.1</span> 分布の限界</h3>
-<p>CPSSW04には、earningsやageなどの連続変数も含まれています。 これらはCPSSW04データの特徴を理解する上で、非常に重要な変数でしょう。 しかしながら複数の連続変数を含めると、分布表は巨大になり、理解が困難です。</p>
-<p>例えば、earnings, age, degree, genderについて、度数分布表を作成すると、4,649行の表が作成されます。 このような巨大な分布表の理解は、非常に困難です。</p>
+<p><code>CPSSW04</code>には、<code>earnings</code>や<code>age</code>などの連続変数も含まれています。 これらはCPSSW04データの特徴を理解する上で、非常に重要な変数でしょう。 しかしながら複数の連続変数を含めると、分布表は巨大になり、理解が困難です。</p>
+<p>例えば、<code>earnings</code>, <code>age</code>, <code>degree</code>, <code>gender</code>について、度数分布表を作成すると、4,649行の表が作成されます。 このような巨大な分布表の理解は、非常に困難です。</p>
 <p>なお少数の連続変数の分布に注目するのであれば、ヒストグラムなどの分布を可視化するツール (Data visualization)を利用することで、人間が認識しやすくできます。 しかしながら複数の変数の分布を可視化することは、困難です。</p>
 </section>
 </section>
 <section id="平均値による要約" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="平均値による要約"><span class="header-section-number">2.2</span> 平均値による要約</h2>
 <p>分布全体の特徴ではなく、個別の変数の特徴を把握する方法も数多く提案されています。 中でも各変数の分布を、その特徴を表す統計量 (statistics) に要約する方法は有力です。</p>
-<p>最も代表的なものは、平均値です。 例えばearningsの平均値 (平均所得) は、以下の方法で計算結果として定義できます。</p>
+<p>最も代表的なものは、平均値です。 例えば<code>earnings</code>の平均値 (平均所得) は、以下の方法で計算結果として定義できます。</p>
 <p><span class="math display">\[
 平均所得 = \frac{第1事例の所得 + 第2事例の所得 +...}{事例数}
 \]</span> 平均値は、<strong>分布のみ</strong>を用いて計算することも可能です。</p>
@@ -379,7 +379,7 @@ Table&nbsp;2.1
 + 2\times 「所得が2」の割合
 \tag{2.1}\]</span></span></p>
 <p>無論、どちらの方法でも同じ値が計算されます。</p>
-<p>CPSSW04に含まれるすべての変数について、summary関数は、他の統計量とともに、平均値を計算します。</p>
+<p><code>CPSSW04</code>に含まれるすべての変数について、<code>summary</code>関数は、他の統計量とともに、平均値を計算します。</p>
 <div id="tbl-data_summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-data_summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -399,17 +399,17 @@ Table&nbsp;2.2
 </div>
 </figure>
 </div>
-<p>Meanに表示される数値が平均値です。 例えば、CPSSW04データにおける平均年齢は29.75才です。</p>
+<p><code>Mean</code>に表示される数値が平均値です。 例えば、<code>CPSSW04</code>データにおける平均年齢は29.75才です。</p>
 <section id="平均値の限界" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="平均値の限界"><span class="header-section-number">2.2.1</span> 平均値の限界</h3>
-<p>平均値には、変数間の関係性を示さないという問題があります。 例えば、<a href="#tbl-data_summary" class="quarto-xref">Table&nbsp;<span>2.2</span></a> を見ても、earningsとage,degree,genderの間の関係性について、何もわからないでしょう。</p>
+<p>平均値には、変数間の関係性を示さないという問題があります。 例えば、<a href="#tbl-data_summary" class="quarto-xref">Table&nbsp;<span>2.2</span></a> を見ても、<code>earnings</code>と<code>age</code>,<code>degree</code>,<code>gender</code>の間の関係性について、何もわからないでしょう。</p>
 <p>変数間の関係性を把握する方法には、数多くの提案があります。 ここでは条件付き母平均、および線型モデルを用いる方法を紹介します。</p>
 </section>
 </section>
 <section id="条件付き平均値による要約" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="条件付き平均値による要約"><span class="header-section-number">2.3</span> 条件付き平均値による要約</h2>
 <p>もし少数の目的変数と多数の説明変数の関係性を把握することが目標であれば、<strong>条件付き分布</strong>から計算できる<strong>条件付き平均値</strong>の利用が有効です。</p>
-<p>条件付き分布は、ある特定の条件を満たす事例内での分布です。 例えば、「大学卒内でのearnings = 1の割合」は以下で計算できます。 <span class="math display">\[
+<p>条件付き分布は、ある特定の条件を満たす事例内での分布です。 例えば、「大学卒内での<code>earnings</code> = 1の割合」は以下で計算できます。 <span class="math display">\[
 大学卒内での「所得が1」の事例割合
 \]</span> <span class="math display">\[
 =\frac{大学卒かつ「所得が1」の事例割合}{大学卒の事例割合}
@@ -453,16 +453,16 @@ Table&nbsp;2.2
 <p>大量の変数間の関係性を要約するために、線形モデルを適用する方法が広く用いられます。 例えば、賃金と年齢・学位・性別の関係を次のモデルで表すことを目指します。 <span id="eq-data_linear_model"><span class="math display">\[
 \beta_0 + \beta_1\times age + \beta_2\times degree + \beta_3\times gender
 \tag{2.2}\]</span></span></p>
-<p>ただしdegreeとgenderの値は、数字ではなく、文字です。 線型モデルに導入する際には、何らかの数字に変換する必要があります。</p>
-<p>ここではbachelorとgenderをダミー変数、degreebachelorとgenderfemale、に変換します。 ダミー変数は、以下のように定義されます。</p>
+<p>ただし<code>degree</code>と<code>gender</code>の値は、数字ではなく、文字です。 線型モデルに導入する際には、何らかの数字に変換する必要があります。</p>
+<p>ここでは<code>bachelor</code>と<code>gender</code>をダミー変数、<code>degreebachelor</code>と<code>genderfemale</code>、に変換します。 ダミー変数は、以下のように定義されます。</p>
 <ul>
-<li><p>degreebachelor: degreeがbachelorだった場合は1、その他の場合は0</p></li>
-<li><p>genderfemale: genderがfemaleだった場合は1、その他の場合は0</p></li>
+<li><p><code>degreebachelor</code>: <code>degree</code>が<code>bachelor</code>だった場合は1、その他の場合は0</p></li>
+<li><p><code>genderfemale</code>: <code>gender</code>が<code>female</code>だった場合は1、その他の場合は0</p></li>
 </ul>
 <p><span class="math inline">\(\beta_0,\beta_1,\beta_2,\beta_3\)</span> はパラメタと呼ばれ、モデルがデータに極力一致するように選ばれます。 このようにデータに合うように設定したモデルの特徴を調べることで、データの特徴を大雑把に理解することができます。</p>
 <section id="ols" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="ols"><span class="header-section-number">2.4.1</span> OLS</h3>
-<p>モデルをデータに適合される典型的な方法はOLS (最小二乗法) です。 具体的な計算方法を紹介する前に、Rでの実行方法から紹介します。 Rでは、lm関数を用いることで、OLSを容易に実行できます。 例えば、以下のコードで、<a href="#eq-data_linear_model" class="quarto-xref">Equation&nbsp;<span>2.2</span></a> を CPSSW04に適合させることができます。</p>
+<p>モデルをデータに適合される典型的な方法はOLS (最小二乗法) です。 具体的な計算方法を紹介する前に、Rでの実行方法から紹介します。 Rでは、<code>lm</code>関数を用いることで、OLSを容易に実行できます。 例えば、以下のコードで、<a href="#eq-data_linear_model" class="quarto-xref">Equation&nbsp;<span>2.2</span></a> を <code>CPSSW04</code>に適合させることができます。</p>
 <div id="tbl-data_lm" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-data_lm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -482,7 +482,7 @@ Coefficients:
 </div>
 </figure>
 </div>
-<p>各説明変数名の下の数値が、パラメタの計算結果です。 <a href="#eq-data_linear_model" class="quarto-xref">Equation&nbsp;<span>2.2</span></a> のようなシンプルな線型モデルにおいて、パラメタは各説明変数と結果変数であるearningsの「モデル上での関係性」を表します。 推定結果から、年齢や大学卒は賃金と正の関係があり、男性に比べて女性の賃金が低い傾向にあることがわかります。</p>
+<p>各説明変数名の下の数値が、パラメタの計算結果です。 <a href="#eq-data_linear_model" class="quarto-xref">Equation&nbsp;<span>2.2</span></a> のようなシンプルな線型モデルにおいて、パラメタは各説明変数と結果変数である<code>earnings</code>の「モデル上での関係性」を表します。 推定結果から、年齢や大学卒は賃金と正の関係があり、男性に比べて女性の賃金が低い傾向にあることがわかります。</p>
 </section>
 <section id="モデルの定式化" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="モデルの定式化"><span class="header-section-number">2.4.2</span> モデルの定式化</h3>
@@ -492,7 +492,7 @@ Coefficients:
 <section id="olsの計算方法" class="level3" data-number="2.4.3">
 <h3 data-number="2.4.3" class="anchored" data-anchor-id="olsの計算方法"><span class="header-section-number">2.4.3</span> OLSの計算方法</h3>
 <p>OLSの具体的な計算方法を紹介します。 基本的なアイディアは、データとモデルの乖離度合いを測定する指標である、<strong>平均二乗誤差</strong>を極力小さくするようにパラメタを算出するというものです。</p>
-<p>例えば、ageのみを説明変数として、earningsについて、以下の線形モデルを設定します。 <span class="math display">\[
+<p>例えば、<code>age</code>のみを説明変数として、<code>earnings</code>について、以下の線形モデルを設定します。 <span class="math display">\[
 \beta_0 + \beta_1\times age
 \]</span> ある事例 <span class="math inline">\(i\)</span> についての二乗誤差は以下のように定義されます。 <span class="math display">\[
 事例iの二乗誤差=(事例 i の所得 - \underbrace{(\beta_0+\beta_1\times 事例iのage)}_{モデルが算出する賃金})^2
@@ -511,7 +511,7 @@ Coefficients:
 <section id="線型モデルの限界" class="level3" data-number="2.4.4">
 <h3 data-number="2.4.4" class="anchored" data-anchor-id="線型モデルの限界"><span class="header-section-number">2.4.4</span> 線型モデルの限界</h3>
 <p>線型モデルは、あくまで関係性を単純化するため、実際の条件付き平均値を完全には反映しません。</p>
-<p>例えばearningsについて、 <span class="math display">\[
+<p>例えば<code>earnings</code>について、 <span class="math display">\[
 \beta_0 + \beta_1\times age
 \]</span> をOLSで当てはめてみます。 実際の条件付き平均値とモデルの関係性は、以下でした。</p>
 <div class="cell">

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; 母集団の要約と推定 – データ分析: 入門</title>
+<title>3&nbsp; 母集団の要約と推定 – データ分析: OLS入門</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -148,7 +168,7 @@ window.Quarto = {
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     </a>
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">データ分析: 入門</span>
+    <span class="navbar-title">データ分析: OLS入門</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -244,6 +264,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#統計的推論" id="toc-統計的推論" class="nav-link" data-scroll-target="#統計的推論"><span class="header-section-number">3.4.1</span> 統計的推論</a></li>
   <li><a href="#信頼区間-1" id="toc-信頼区間-1" class="nav-link" data-scroll-target="#信頼区間-1"><span class="header-section-number">3.4.2</span> 信頼区間</a></li>
+  <li><a href="#信頼区間の解釈" id="toc-信頼区間の解釈" class="nav-link" data-scroll-target="#信頼区間の解釈"><span class="header-section-number">3.4.3</span> 信頼区間の解釈</a></li>
   </ul></li>
   <li><a href="#sec-population_overfit" id="toc-sec-population_overfit" class="nav-link" data-scroll-target="#sec-population_overfit"><span class="header-section-number">3.5</span> 複雑すぎるモデルの問題点</a></li>
   </ul>
@@ -323,7 +344,7 @@ Important&nbsp;3.1: 思考実験
 <li><p><strong>推定結果</strong>（estimate）：データから実際に計算される値</p></li>
 <li><p><strong>推定目標</strong>（parameter of interest/estimand）：推定の対象となる“真の値”</p></li>
 </ul>
-<p>たとえば、CPSSW04データから計算される平均所得は、あくまで「推定結果」であり、「全米の平均所得」という推定目標に近づくことを期待して計算されます。</p>
+<p>たとえば、<code>CPSSW04</code>データから計算される平均所得は、あくまで「推定結果」であり、「全米の平均所得」という推定目標に近づくことを期待して計算されます。</p>
 <p>推定結果と推定目標の関係性を明確にするために、<strong>母集団</strong>と<strong>サンプルング</strong>という概念を導入します。</p>
 </section>
 </section>
@@ -331,11 +352,11 @@ Important&nbsp;3.1: 思考実験
 <h2 data-number="3.2" class="anchored" data-anchor-id="母集団とサンプルリング"><span class="header-section-number">3.2</span> 母集団とサンプルリング</h2>
 <section id="母集団" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="母集団"><span class="header-section-number">3.2.1</span> 母集団</h3>
-<p><strong>母集団</strong> (Population) とは、推定の対象となる集団のことです。 <a href="#imp-population_research" class="quarto-xref">Important&nbsp;<span>3.1</span></a> における母集団は「2025年の労働者」、CPSSW04では、「2004年のアメリカの全世帯」が妥当な母集団でしょう。</p>
+<p><strong>母集団</strong> (Population) とは、推定の対象となる集団のことです。 <a href="#imp-population_research" class="quarto-xref">Important&nbsp;<span>3.1</span></a> における母集団は「2025年の労働者」、<code>CPSSW04</code>では、「2004年のアメリカの全世帯」が妥当な母集団でしょう。</p>
 <section id="母分布" class="level4" data-number="3.2.1.1">
 <h4 data-number="3.2.1.1" class="anchored" data-anchor-id="母分布"><span class="header-section-number">3.2.1.1</span> 母分布</h4>
 <p>母分布は、母集団における変数の分布です。 本ページでは、データに含まれる変数について、母集団全員を調査し、計算された分布であるとイメージしてください。</p>
-<p>例えばCPSSW04の母集団である2004年のアメリカの全世帯が観察できれば、同年の 特定の <span class="math inline">\([\)</span> 収入、学位、性別、年齢 <span class="math inline">\(]\)</span> が、全人口に占める割合が計算できるはずです。</p>
+<p>例えば<code>CPSSW04</code>の母集団である2004年のアメリカの全世帯が観察できれば、同年の 特定の <span class="math inline">\([\)</span> 収入、学位、性別、年齢 <span class="math inline">\(]\)</span> が、全人口に占める割合が計算できるはずです。</p>
 <p>以下では、「分析者は母集団を直接観察できず、<strong>母分布を実際に計算することは不可能である</strong>」、という状況を想定します。 そして、直接知ることができない母分布やその特徴を、データから推定することを試みます。</p>
 </section>
 </section>
@@ -508,7 +529,7 @@ Coefficients:
      3.3242       0.4519  </code></pre>
 </div>
 </div>
-<p>以上の結果は、データ上でのOLSでは、ageのパラメタは0.4519であることが確認できます。 一致性から、もしCPSSW04がランダムサンプルングの仮定を満たし、事例数が無限大であれば、「<strong>Population OLS</strong> におけるageのパラメタも0.4519である」という結論は必ず正しいものとなります。 ところが実際の事例数は、7986 であり、無限ではありません。 このため「<strong>Population OLS</strong> におけるageのパラメタも0.4519である」は、ほぼぼ間違った結論となります。</p>
+<p>以上の結果は、データ上でのOLSでは、<code>age</code>のパラメタは0.4519であることが確認できます。 一致性から、もし<code>CPSSW04</code>がランダムサンプルングの仮定を満たし、事例数が無限大であれば、「<strong>Population OLS</strong> における<code>age</code>のパラメタも0.4519である」という結論は必ず正しいものとなります。 ところが実際の事例数は、7986 であり、無限ではありません。 このため「<strong>Population OLS</strong> における<code>age</code>のパラメタも0.4519である」は、ほぼぼ間違った結論となります。</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -558,11 +579,13 @@ Coefficients:
 <div class="callout-body-container callout-body">
 <ul>
 <li><p>推定対象を一定の確率で含むと考えられる、データから計算される区間</p>
-<p>s- 推定対象を含む確率は、信頼確率と呼ばれ、研究者が指定する</p></li>
+<ul>
+<li>推定対象を含む確率は、信頼確率と呼ばれ、研究者が指定する</li>
+</ul></li>
 </ul>
 </div>
 </div>
-<p>Rにおいて、信頼区間を計算する方法は複数存在します。 例えばestimatrパッケージのlm_robust関数を用いれば、以下の仮定のもとで、信頼区間を計算します。</p>
+<p>Rにおいて、信頼区間を計算する方法は複数存在します。 例えば<code>fixest</code>パッケージの<code>feols</code>関数を用いれば、以下の仮定のもとで、信頼区間を計算します。</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -580,45 +603,83 @@ Coefficients:
 </ul>
 </div>
 </div>
-<p>例えば、以下のコードから、reformの平均値について信頼区間を計算できます。 levelには、 信頼水準 (信頼区間が推定対象を含まむ確率)を指定します。 省略すれば、自動的に <span class="math inline">\(0.95\)</span> が指定され、 <span class="math inline">\(95\%\)</span> 信頼区間が計算されます。</p>
+<p>例えば、以下のコードから、<code>reform</code>の平均値について95 <span class="math inline">\(\%\)</span> 信頼区間を計算できます。</p>
 <div id="tbl-inference_quick_R" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-pos="H">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-inference_quick_R-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;3.1
 </figcaption>
 <div aria-describedby="tbl-inference_quick_R-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>estimatr<span class="sc">::</span><span class="fu">lm_robust</span>(earnings <span class="sc">~</span> age, CPSSW04)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> fixest<span class="sc">::</span><span class="fu">feols</span>(earnings <span class="sc">~</span> age, CPSSW04)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             Estimate Std. Error   t value     Pr(&gt;|t|)  CI Lower  CI Upper
-(Intercept) 3.3241841  0.9657404  3.442109 5.801562e-04 1.4310807 5.2172874
-age         0.4519313  0.0329688 13.707847 2.737848e-42 0.3873039 0.5165588
-              DF
-(Intercept) 7984
-age         7984</code></pre>
+<pre><code>                2.5 %    97.5 %
+(Intercept) 1.3595511 5.2888171
+age         0.3862126 0.5176501</code></pre>
 </div>
 </div>
 </figure>
 </div>
-<p>以上の結果から、「Population OLSにおけるageは、概ね <span class="math inline">\(0.387\sim 0.517\)</span> である」という主張を行うことができます。</p>
+<p>以上の結果から、「Population OLSにおける<code>age</code>は、概ね (95 <span class="math inline">\(\%\)</span>) <span class="math inline">\(0.387\sim 0.517\)</span> である」という主張を行うことができます。</p>
+</section>
+<section id="信頼区間の解釈" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="信頼区間の解釈"><span class="header-section-number">3.4.3</span> 信頼区間の解釈</h3>
+<p>本ページでは信頼区間の詳細な導出方法の説明は省略します。 代わりに信頼区間の解釈を詳細に紹介します。</p>
+<p><span class="math inline">\(95\%\)</span> 信頼区間を活用する際に問題となるのは、 <span class="math inline">\(95\%\)</span> の意味を正しく捉えることです。 そこで本節では、信頼確率について、いくつかの異なる、ただしすべて正当な解釈を紹介します<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。</p>
+<p>まずは 思考実験 <a href="#imp-population_research" class="quarto-xref">Important&nbsp;<span>3.1</span></a> と最も密接な解釈である「繰り返しサンプルング」です。</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>ポイント
+<span class="screen-reader-only">Important</span>解釈1. 多数の研究チーム
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>ここまでの議論から、<a href="#imp-population_research" class="quarto-xref">Important&nbsp;<span>3.1</span></a> の思考実験の結果は以下のように整理できます。</p>
-<ul>
-<li><p>各研究チームは、ランダムサンプリングにより、十分な事例数があるデータを集め, <span class="math inline">\(95\%\)</span> 信頼区間を計算したとする</p>
-<ul>
-<li>全研究チームの <span class="math inline">\(95\%\)</span> は、推定対象を含む区間を算出する</li>
-</ul></li>
-</ul>
+<p>皆さんと他の研究チームは、同じ方法でデータを収集しますが、収集自体は独立して行い、データのシェア等も行いません。 このため、データの特徴は全てのチームで異なっており、計算される信頼区間も異なります。</p>
+<p>これらの分析チームが各のデータから、95 <span class="math inline">\(\%\)</span> 信頼区間を計算したとします。 もし信頼区間の仮定が全てのチームで満たされているならば、皆さんを含む大量のチームが計算した信頼区間のうち、95 <span class="math inline">\(\%\)</span> は推定対象 (真の値)を含みます。</p>
 </div>
 </div>
+<p>このような解釈は多くの教科書で紹介される標準的なものです。 しかしこの「繰り返しサンプルング」こそが、わかりにくいと指摘されてきた点です。 社会・市場分析において、「同じ母集団を対象に研究する大量の分析チーム」が存在した、現実の例を挙げることが困難なためです。</p>
+<p>2つ目の解釈は「一人の研究者が長期間にわたって大量の研究を行う」という、より現実的な例え話を土台に、信頼区間を分析結果という”生産物”の品質管理として捉える解釈です。</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>解釈2. データ分析についての品質保証
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>これから皆さんは長期に渡って、さまざまな母集団 (社会) や研究目標について、多くのデータ分析を行なっていくとします。 これら全ての分析において、信頼区間の仮定が満たされていることを前提に、95 <span class="math inline">\(\%\)</span> 信頼区間を計算したとします。 当然さまざまな信頼区間が計算されますが、今後皆さんが計算する大量の信頼区間のうち、95 <span class="math inline">\(\%\)</span> は推定対象 (真の値)を含むことができます。</p>
+</div>
+</div>
+<p>このような品質保証のような見方を、信頼区間の提唱者であるネイマンは<strong>帰納的行動</strong>(Inductive Behavior)と呼びました。</p>
+<p>最後に信頼区間は、仮説検定というアプローチと密接な関係があります。 仮説検定の詳細な説明は補論で行いますが、以下のような「消去法」の結果として信頼区間は解釈できます。</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>解釈3. 検定の反転
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>今、ある推定対象 (例えば改装率)について、候補となる値がたくさん存在します。 この中から、明らかに推定対象ではないと値を除外していきます。 除外する方法は以下です。</p>
+<ol type="1">
+<li><p>仮にある値が推定対象の真の値 (例えば 1 <span class="math inline">\(\%\)</span>) だと想定する</p></li>
+<li><p>もしこの仮の値が、データ上での値とあまりにかけ離れている場合は、真の値の候補から除外する</p></li>
+<li><p>全ての値について、１、２を繰り返し、除外されなかった値を信頼区間とする</p></li>
+</ol>
+<p>つまりデータと矛盾しない値の集合を信頼区間とします。</p>
+</div>
+</div>
+<p>検定の反転を実際に行うためには、統計的検定の知識が必要です。 本ページでは紹介しませんが、標準的な統計学・計量経済学の入門書では必ず紹介されています。</p>
+<p>これらの解釈は、数学的には実は全て同じものであり、解釈のストーリーが違うだけです。 皆さん自身が一番しっくりくるものをとりあえずは選んで問題ありません</p>
 </section>
 </section>
 <section id="sec-population_overfit" class="level2" data-number="3.5">
@@ -635,7 +696,7 @@ age         7984</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>以下のような複雑な条件付き母平均を想定します<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。</p>
+<p>以下のような複雑な条件付き母平均を想定します<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>。</p>
 <p><span class="math display">\[
 E[Y\mid X] = X + 0.1\times X^2 + 2\times X^3 + 0.01\times X^4 + 5 \times x^5
 \]</span> <span id="eq-population_numeric_example"><span class="math display">\[
@@ -704,6 +765,11 @@ E[Y\mid X] = X + 0.1\times X^2 + 2\times X^3 + 0.01\times X^4 + 5 \times x^5
 <p>この数値例からわかるように、複雑なモデルを用いる際には、十分なデータがあるかどうかを慎重に検討する必要があります。</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-hanley2025probabilistic" class="csl-entry" role="listitem">
+Hanley, James A. 2025. <span>“Probabilistic Parameter Estimates That Require Less Small Print.”</span> <em>The American Statistician</em>, no. just-accepted: 1–11.
+</div>
+</div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
@@ -711,9 +777,10 @@ E[Y\mid X] = X + 0.1\times X^2 + 2\times X^3 + 0.01\times X^4 + 5 \times x^5
 <li id="fn1"><p>アナログ原理やプラグイン原理として呼ばれています。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>母平均が計算できないケースとしては、母分布がコーシー分布である場合などが有名です。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>どのくらいあれば十分なのかは、難しい問題です。ただし多くの教科書では、200事例以上が基準とされています。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>個々の <span class="math inline">\(Y\)</span> と <span class="math inline">\(X\)</span> の値は、以下で決定されます: <span class="math inline">\(X=\)</span> 0から1までの一様分布、 <span class="math display">\[
+<li id="fn4"><p><span class="citation" data-cites="hanley2025probabilistic">Hanley (<a href="#ref-hanley2025probabilistic" role="doc-biblioref">2025</a>)</span><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>個々の <span class="math inline">\(Y\)</span> と <span class="math inline">\(X\)</span> の値は、以下で決定されます: <span class="math inline">\(X=\)</span> 0から1までの一様分布、 <span class="math display">\[
 Y=E[Y\mid X] + \underbrace{u}_{平均0,分散1の正規分布}
-\]</span> <a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+\]</span> <a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

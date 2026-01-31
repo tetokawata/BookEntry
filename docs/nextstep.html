@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; OLSの応用と課題 – データ分析: 入門</title>
+<title>4&nbsp; OLSの応用と課題 – データ分析: OLS入門</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,7 +167,7 @@ window.Quarto = {
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     </a>
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">データ分析: 入門</span>
+    <span class="navbar-title">データ分析: OLS入門</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -243,7 +243,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#ナイーブな見方-完璧なモデルの推定" id="toc-ナイーブな見方-完璧なモデルの推定" class="nav-link active" data-scroll-target="#ナイーブな見方-完璧なモデルの推定"><span class="header-section-number">4.1</span> ナイーブな見方: 完璧なモデルの推定</a></li>
-  <li><a href="#全体の記述" id="toc-全体の記述" class="nav-link" data-scroll-target="#全体の記述"><span class="header-section-number">4.2</span> 全体の記述</a>
+  <li><a href="#全体の特徴の記述" id="toc-全体の特徴の記述" class="nav-link" data-scroll-target="#全体の特徴の記述"><span class="header-section-number">4.2</span> 全体の特徴の記述</a>
   <ul class="collapse">
   <li><a href="#olsの注意点" id="toc-olsの注意点" class="nav-link" data-scroll-target="#olsの注意点"><span class="header-section-number">4.2.1</span> OLSの注意点</a></li>
   <li><a href="#他の手法" id="toc-他の手法" class="nav-link" data-scroll-target="#他の手法"><span class="header-section-number">4.2.2</span> 他の手法</a></li>
@@ -320,8 +320,8 @@ RMSE: 7.88234   Adj. R2: 0.189694</code></pre>
 </ul>
 <p>以上の理由から、OLSによって「完璧でシンプルなモデル」を推定しようとする試みは、通常うまくいきません。 そのため、分析の目的に応じて、適切なモデルを構築することが現実的なアプローチとなります。</p>
 </section>
-<section id="全体の記述" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="全体の記述"><span class="header-section-number">4.2</span> 全体の記述</h2>
+<section id="全体の特徴の記述" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="全体の特徴の記述"><span class="header-section-number">4.2</span> 全体の特徴の記述</h2>
 <p>記述研究とは、データに含まれる情報をもとに、複数の変数の間にどのような関係が存在するのかを明らかにすることを目的とする研究です。</p>
 <p>このような目的に対して、OLSは非常に有効な分析手法とされています。 OLSは、単純な線形モデルの推定を得意としています。 <a href="#tbl-next_example" class="quarto-xref">Table&nbsp;<span>4.1</span></a> のような単純な線形モデルは構造が単純であるため、ある程度データ分析に慣れていれば、どの変数がどのように影響しているのかを人間が理解しやすい形で示すことができます。 例えば、大学卒のパラメタは正なので、平均賃金が高い傾向、女性は平均賃金が低い傾向、年齢と平均賃金は正の関係性が読み取れます。</p>
 <section id="olsの注意点" class="level3" data-number="4.2.1">
@@ -385,7 +385,7 @@ degreebachelor:genderfemale            age:genderfemale
 </section>
 <section id="特定の特徴の記述" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="特定の特徴の記述"><span class="header-section-number">4.4</span> 特定の特徴の記述</h2>
-<p>OLSがよく応用されてきた研究課題の一つに、特定の変数間の関係性を明らかにする分析があります。 たとえば、賃金（earnings）と学歴（degree）の関係を調べる研究がその例です。</p>
+<p>OLSがよく応用されてきた研究課題の一つに、特定の変数間の関係性を明らかにする分析があります。 たとえば、賃金（<code>earnings</code>）と学歴（<code>degree</code>）の関係を調べる研究がその例です。</p>
 <p>このような課題に対しては、以下のようなシンプルな線形モデルを推定することで、基本的な関係性を把握することができます。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> fixest<span class="sc">::</span><span class="fu">feols</span>(earnings <span class="sc">~</span> degree, CPSSW04)</span>
@@ -398,7 +398,7 @@ degreebachelor 6.138989 6.855967</code></pre>
 </div>
 <p>この推定結果から、大学卒の方が、概ね 6.14 <span class="math inline">\(\sim\)</span> 6.86ほど平均賃金が高いと考えられます。</p>
 <p>さらに、OLSを用いることで、賃金と学歴の関係について、より詳細な特徴を捉えることも可能です。 たとえば、「もし大学卒と非大学卒の間で、性別や年齢の分布に違いがなかったとしたら、賃金格差はどうなるか？」という問いに答えることができます。</p>
-<p>実際のデータでは、大学卒と非大学卒の間で性別や年齢の分布に差があります。 こうした差を統計的に調整したうえで賃金を比較するには、直接の関心ではない説明変数（この場合は age や gender）について、より柔軟に定式化したモデルを用いることが有効です。</p>
+<p>実際のデータでは、大学卒と非大学卒の間で性別や年齢の分布に差があります。 こうした差を統計的に調整したうえで賃金を比較するには、直接の関心ではない説明変数（この場合は <code>age</code> や <code>gender</code>）について、より柔軟に定式化したモデルを用いることが有効です。</p>
 <p>以下は、その一例です。</p>
 <div id="tbl-nextstep_comparison" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -421,6 +421,34 @@ degreebachelor 6.4815 7.180926</code></pre>
 </figure>
 </div>
 <p>この推定結果から、大学卒の人の平均賃金は、概ね 6.49 <span class="math inline">\(\sim\)</span> 7.18ほど高いという結果が得られ、単純なモデルよりも格差がやや広がっていることがわかります。</p>
+<p>予測や全体の記述との違いを明確にするために、極端に対比してみます。</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>予測、全体の特徴の記述、特定の特徴の記述は、すべて <span class="math inline">\(Y\)</span> と <span class="math inline">\(X\)</span> の関係性の推定を目指します。ただし、各 <span class="math inline">\(X\)</span> と <span class="math inline">\(Y\)</span> の個別の関係性の重要性が大きく異なります。</p></li>
+<li><p><strong>全体の特徴の記述:</strong> すべての <span class="math inline">\(X\)</span> と <span class="math inline">\(Y\)</span> の関係性が等しく重要</p>
+<ul>
+<li>すべてのパラメタについて、信頼区間などで推定誤差を考慮したい</li>
+</ul></li>
+<li><p><strong>予測:</strong> 重要なのは、モデルによる予測値の正確性であり、その意味では、各 <span class="math inline">\(X\)</span> と <span class="math inline">\(Y\)</span> の個別の関係性はすべて重要ではない</p>
+<ul>
+<li>モデル全体の予測性能は測定したいが、各パラメタについての推定誤差は関心ではない</li>
+</ul></li>
+<li><p><strong>特定の特徴の記述:</strong> <span class="math inline">\(X\)</span> のなかの特定の変数と <span class="math inline">\(Y\)</span> の関係性把握が重要であり、他の <span class="math inline">\(X\)</span> と <span class="math inline">\(Y\)</span> の関係性は重要ではない</p>
+<ul>
+<li>関心となる特定のパラメタについて、信頼区間などで推定誤差を考慮したい</li>
+</ul></li>
+</ul>
+</div>
+</div>
 <section id="olsの注意点-2" class="level3" data-number="4.4.1">
 <h3 data-number="4.4.1" class="anchored" data-anchor-id="olsの注意点-2"><span class="header-section-number">4.4.1</span> OLSの注意点</h3>
 <section id="結果の解釈" class="level4 unnumbered">
@@ -457,18 +485,21 @@ Type: response
 Comparison: bachelor - highschool</code></pre>
 </div>
 </div>
-<p>この結果から、gender と age の分布の違いを統計的に解消した場合、大学卒の人の平均賃金は概ね 6.47 <span class="math inline">\(\sim\)</span> 7.17 高いと推定されました。</p>
+<p>この結果から、<code>gender</code> と <code>age</code> の分布の違いを統計的に解消した場合、大学卒の人の平均賃金は概ね 6.47 <span class="math inline">\(\sim\)</span> 7.17 高いと推定されました。</p>
 </section>
 </section>
 <section id="他の手法-2" class="level3" data-number="4.4.2">
 <h3 data-number="4.4.2" class="anchored" data-anchor-id="他の手法-2"><span class="header-section-number">4.4.2</span> 他の手法</h3>
-<p>OLSを用いた比較には、いくつかの問題点が指摘され、それを解消できる手法も開発されてます。 例えば、傾向スコアやエントロピーウェイトなどを活用する方法 <span class="citation" data-cites="hainmueller2012entropy">(<a href="#ref-hainmueller2012entropy" role="doc-biblioref">Hainmueller 2012</a>)</span> が有名です。</p>
-<p>さらに機械学習を活用した信頼性の改善方法も、近年確立されつつあります。 この方法は機械学習の持つ問題点 (信頼区間の計算が難しいなど) を補う仕組みを導入することで、モデルの定式化への推定結果の依存度を下げつつ、推定誤差を考慮した分析が可能になっています<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>。</p>
+<p>OLSを用いた比較には、いくつかの問題点が指摘され、それを解消できる手法も開発されてます。 例えば、傾向スコアやエントロピーウェイトなどを活用する方法 <span class="citation" data-cites="hainmueller2012entropy">(<a href="#ref-hainmueller2012entropy" role="doc-biblioref">Hainmueller 2012</a>)</span> が有名です<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>。</p>
+<p>さらに機械学習を活用した信頼性の改善方法も、近年確立されつつあります。 この方法は機械学習の持つ問題点 (信頼区間の計算が難しいなど) を補う仕組みを導入することで、モデルの定式化への推定結果の依存度を下げつつ、推定誤差を考慮した分析が可能になっています<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>。</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-chattopadhyay2023implied" class="csl-entry" role="listitem">
 Chattopadhyay, Ambarish, and José R Zubizarreta. 2023. <span>“On the Implied Weights of Linear Regression for Causal Inference.”</span> <em>Biometrika</em> 110 (3): 615–29.
+</div>
+<div id="ref-Chattopadhyay2024Causation" class="csl-entry" role="listitem">
+Chattopadhyay, Ambarish, and José R. Zubizarreta. 2024. <span>“Causation, <span>Comparison</span>, and <span>Regression</span>.”</span> <em>Harvard Data Science Review</em> 6 (1).
 </div>
 <div id="ref-chernozhukov2024applied" class="csl-entry" role="listitem">
 Chernozhukov, Victor, Christian Hansen, Nathan Kallus, Martin Spindler, and Vasilis Syrgkanis. 2025. <em>Applied Causal Inference Powered by ML and AI</em>. <a href="https://causalml-book.org/">https://causalml-book.org/</a>.
@@ -502,7 +533,8 @@ Wager, Stefan. 2024. <em>Causal Inference: A Statistical Learning Approach</em>.
 <li id="fn3"><p><span class="citation" data-cites="chernozhukov2024applied">Chernozhukov et al. (<a href="#ref-chernozhukov2024applied" role="doc-biblioref">2025</a>)</span>, <span class="citation" data-cites="wager2024causal">Wager (<a href="#ref-wager2024causal" role="doc-biblioref">2024</a>)</span> , <span class="citation" data-cites="ding2024first">Ding (<a href="#ref-ding2024first" role="doc-biblioref">2024</a>)</span> (ドラフト版: <span class="citation" data-cites="ding2023coursecausalinference">Ding (<a href="#ref-ding2023coursecausalinference" role="doc-biblioref">2023</a>)</span>)<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p><span class="citation" data-cites="chattopadhyay2023implied">Chattopadhyay and Zubizarreta (<a href="#ref-chattopadhyay2023implied" role="doc-biblioref">2023</a>)</span><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>詳細は、パッケージのホームページ (https://marginaleffects.com/) を参照ください。<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p><span class="citation" data-cites="chernozhukov2024applied">Chernozhukov et al. (<a href="#ref-chernozhukov2024applied" role="doc-biblioref">2025</a>)</span><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>OLSが持つ問題点や他の方法を紹介した資料としては、<span class="citation" data-cites="Chattopadhyay2024Causation">(<a href="#ref-Chattopadhyay2024Causation" role="doc-biblioref">Chattopadhyay and Zubizarreta 2024</a>)</span>^(https://hdsr.mitpress.mit.edu/pub/1ybwbmlw/release/2) を推奨します。<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><span class="citation" data-cites="chernozhukov2024applied">Chernozhukov et al. (<a href="#ref-chernozhukov2024applied" role="doc-biblioref">2025</a>)</span><a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
