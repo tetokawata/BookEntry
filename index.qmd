@@ -1,9 +1,18 @@
-# Preface {.unnumbered}
+# はじめに
 
-This is a Quarto book.
+本ページでは、データ分析における基本的な手法の一つである「母平均」および「Population OLS」の推定方法について、その基本概念とともに紹介します。
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+特に、「推定対象として定義された母集団上での計算と同じ操作を、実際のデータ上で行う」というシンプルかつ応用の範囲が広い推定の考え方に注目します。
+このアプローチは、モーメント法 (Method of Moments)^[より一般的には、プラグイン原理（plug-in principle） や アナログ原理（analogy principle）] として知られており、より一般的な推定方法の一例としても位置づけられます。
 
-```{r}
-1 + 1
-```
+なお、本ページのメインの議論は、「研究者が定式化」したモデルを**どのように計算・推定するのか**、に関するものであり、**どのようなモデルを定式化すべきか** については扱いません。
+あるべき定式化については、最終章で代表的な議論を簡単に紹介します。
+
+より詳しく学びたい方には、以下の教科書を推奨します。
+
+- Applied Causal Inference Powered by ML and AI: 以下の公式ホームページから、無料で入手できる。本ページの内容は、主に1章と対応します
+
+  - [homepage](https://causalml-book.org/)
+
+- @aronow2019foundations : 有料だが、Applied Causal Inference Powered by ML and AI より少ない前提知識で読める
+

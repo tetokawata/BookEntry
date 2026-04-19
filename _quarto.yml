@@ -1,16 +1,37 @@
 project:
   type: book
+  output-dir: docs
 
 book:
-  title: "計量経済学"
+  title: "データ分析: OLS入門"
   author: "川田恵介"
+  navbar: 
+    right: 
+    - icon: github 
+      href: https://github.com/tetokawata/BookEntry
+      aria-label: GitHub
   date: now
   chapters:
     - index.qmd
+    - data.qmd
+    - population.qmd
+    - nextstep.qmd
 bibliography: references.bib
 
 format:
   html:
     toc: true
     number-sections: true
-
+  pdf:
+    pdf-engine: lualatex
+    documentclass: ltjsbook
+    keep-tex: true
+    fontsize: 9pt
+    include-in-header:
+      text: |
+        \setlength{\baselineskip}{1.0\baselineskip}
+        \setlength{\textheight}{32\baselineskip}
+        \usepackage{float}
+execute: 
+  warning: false
+  message: false
