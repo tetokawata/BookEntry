@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="川田恵介">
-<meta name="dcterms.date" content="2026-01-31">
+<meta name="dcterms.date" content="2026-04-19">
 
 <title>データ分析: OLS入門</title>
 <style>
@@ -167,7 +167,7 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./nextstep.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">OLSの応用と課題</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">研究目標への接続</span></span></a>
   </div>
 </li>
     </ul>
@@ -206,7 +206,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 31, 2026</p>
+      <p class="date">April 19, 2026</p>
     </div>
   </div>
   
@@ -221,11 +221,15 @@ div.csl-indent {
 <section id="はじめに" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> はじめに</h1>
 <p>本ページでは、データ分析における基本的な手法の一つである「母平均」および「Population OLS」の推定方法について、その基本概念とともに紹介します。</p>
-<p>特に、「推定対象として定義された母集団上での計算と同じ操作を、実際のデータ上で行う」というシンプルかつ応用の範囲が広い推定の考え方に注目します。 このアプローチは、プラグイン原理（plug-in principle） や アナログ原理（analogy principle） として知られており、より一般的な推定方法の一例としても位置づけられます。</p>
-<p>なお、本ページの議論は、「研究者が定式化」したモデルを<strong>どのように計算・推定するのか</strong>、に関するものであり、<strong>どのようなモデルを定式化すべきか</strong> については扱いません。 ただし最終章で、この点について、代表的な議論を簡単に紹介します。</p>
+<p>特に、「推定対象として定義された母集団上での計算と同じ操作を、実際のデータ上で行う」というシンプルかつ応用の範囲が広い推定の考え方に注目します。 このアプローチは、モーメント法 (Method of Moments)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> として知られており、より一般的な推定方法の一例としても位置づけられます。</p>
+<p>なお、本ページのメインの議論は、「研究者が定式化」したモデルを<strong>どのように計算・推定するのか</strong>、に関するものであり、<strong>どのようなモデルを定式化すべきか</strong> については扱いません。 あるべき定式化については、最終章で代表的な議論を簡単に紹介します。</p>
 <p>より詳しく学びたい方には、以下の教科書を推奨します。</p>
 <ul>
-<li><span class="citation" data-cites="aronow2019foundations">Aronow and Miller (<a href="#ref-aronow2019foundations" role="doc-biblioref">2019</a>)</span></li>
+<li><p>Applied Causal Inference Powered by ML and AI: 以下の公式ホームページから、無料で入手できる。本ページの内容は、主に1章と対応します</p>
+<ul>
+<li><a href="https://causalml-book.org/">homepage</a></li>
+</ul></li>
+<li><p><span class="citation" data-cites="aronow2019foundations">Aronow and Miller (<a href="#ref-aronow2019foundations" role="doc-biblioref">2019</a>)</span> : 有料だが、Applied Causal Inference Powered by ML and AI より少ない前提知識で読める</p></li>
 </ul>
 
 
@@ -234,6 +238,12 @@ div.csl-indent {
 Aronow, Peter M, and Benjamin T Miller. 2019. <em>Foundations of Agnostic Statistics</em>. Cambridge University Press.
 </div>
 </div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>より一般的には、プラグイン原理（plug-in principle） や アナログ原理（analogy principle）<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
